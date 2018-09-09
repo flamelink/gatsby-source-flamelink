@@ -1,0 +1,55 @@
+{
+  "name": "gatsby-source-flamelink",
+  "version": "1.0.0-alpha",
+  "description": "Gatsby source plugin for building websites using the Flamelink CMS as a data source",
+  "homepage": "https://github.com/flamelink/gatsby-source-flamelink#readme",
+  "bugs": {
+    "url": "https://github.com/flamelink/gatsby-source-flamelink/issues"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-source-plugin",
+    "flamelink",
+    "headless",
+    "cms",
+    "firebase"
+  ],
+  "author": "JP Erasmus <jperasmus11@gmail.com>",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": "https://github.com/flamelink/gatsby-source-flamelink",
+  "deprecated": false,
+  "scripts": {
+    "build": "babel src --out-dir . --ignore **/__tests__",
+    "prepare": "cross-env NODE_ENV=production npm run build",
+    "dev": "babel -w src --out-dir . --ignore **/__tests__",
+    "lint": "eslint ./src --cache"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "compose-then": "^1.0.1",
+    "firebase-admin": "^6.0.0",
+    "flamelink": "^0.19.1",
+    "lodash.curry": "^4.1.1",
+    "lodash.get": "^4.4.2",
+    "lodash.isplainobject": "^4.0.6",
+    "lodash.result": "^4.5.2",
+    "pascalcase": "^0.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-prettier": "^2.6.2",
+    "prettier": "^1.14.2"
+  },
+  "peerDependencies": {
+    "gatsby": "next"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "extends": ["airbnb-base", "prettier"],
+  "env": {
+    "jest": true,
+    "node": true
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "global-require": "off",
+    "no-prototype-builtins": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": "warn",
+    "prettier/prettier": ["error", { "singleQuote": true, "printWidth": 100 }]
+  }
+}
