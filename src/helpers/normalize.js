@@ -70,7 +70,6 @@ const prepareKeys = entry => {
   return newEntry
 }
 
-// TODO: Replace ?'s with actual types
 const DATAFIELD_TO_DATATYPE = {
   autocomplete: 'string',
   boolean: 'boolean',
@@ -79,23 +78,23 @@ const DATAFIELD_TO_DATATYPE = {
   date: 'string',
   'datetime-local': 'string',
   email: 'string',
-  fieldset: '?',
+  fieldset: 'object',
   'linked-text': 'string',
-  location: '?',
+  location: 'object',
   'markdown-editor': 'string',
-  media: '?',
+  media: 'object',
   number: 'number',
   password: 'string',
   radio: 'string',
   range: 'string',
-  repeater: '?',
-  select: '?',
-  'select-relational': '?',
-  tag: '?',
+  repeater: 'object',
+  select: 'object',
+  'select-relational': 'object',
+  tag: 'object',
   text: 'string',
   textarea: 'string',
   time: 'string',
-  'tree-relational': '?',
+  'tree-relational': 'object',
   wysiwyg: 'string',
   'wysiwyg-cke': 'string'
 }
@@ -118,7 +117,7 @@ const checkContentEntryTypes = curry(async (fieldTypes, entry) => {
         break
 
       case 'number':
-        newEntry[key] = parseInt(newEntry[key], 10)
+        newEntry[key] = parseFloat(newEntry[key], 10)
         break
 
       // no default
