@@ -7,13 +7,13 @@ Source plugin for pulling data into Gatsby v2 from [Flamelink](https://flamelink
 ## Install
 
 ```shell
-npm install --save gatsby-source-flamelink@alpha
+npm install --save gatsby-source-flamelink
 ```
 
 or
 
 ```shell
-yarn add gatsby-source-flamelink@alpha
+yarn add gatsby-source-flamelink
 ```
 
 ## How to use
