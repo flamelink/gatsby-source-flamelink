@@ -60,7 +60,11 @@ const getSchemas = async options => {
 
   const schemasData = await app.schemas.get()
 
-  allSchemas = Object.keys(schemasData)
+  if (!schemasData) {
+    console.warn('[FLAMELINK]: It seems like you do not have any available schemas setup just yet.')
+  }
+
+  allSchemas = Object.keys(schemasData || {})
     .filter(schema => schemasData[schema].enabled)
     .map(schema => schemasData[schema])
 
