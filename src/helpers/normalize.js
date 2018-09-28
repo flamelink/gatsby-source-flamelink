@@ -219,8 +219,8 @@ const processContentEntry = async (contentType, locale, entry, createNodeId) => 
 }
 exports.processContentEntry = processContentEntry
 
-const processNavigation = (locale, nav, createNodeId) => {
-  const preppedNav = prepNav(nav)
+const processNavigation = async (locale, nav, createNodeId) => {
+  const preppedNav = await prepNav(nav)
   const nodeId = createNodeId(`flamelink-nav-${locale}-${preppedNav.flamelink_id}`)
   const nodeContent = JSON.stringify(preppedNav)
 
