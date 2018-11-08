@@ -4,6 +4,8 @@
 
 Source plugin for pulling data into Gatsby v2 from [Flamelink](https://flamelink.io).
 
+> PLEASE NOTE: This plugin uses the [Flamelink JavaScript SDK](https://flamelink.github.io/flamelink) under the hood, which currently only support the [Firebase Realtime Database](https://firebase.google.com/docs/database/) and not [Cloud Firestore](https://firebase.google.com/docs/firestore/) just yet.
+
 ## Install
 
 ```shell
