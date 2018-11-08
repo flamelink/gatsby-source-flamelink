@@ -36,11 +36,38 @@ plugins: [
       content: true,
       populate: true,
       navigation: true,
-      globals: true,
-      verbose: false
+      globals: true
     }
   }
 ]
+```
+
+## Debug
+
+To see debug information in your terminal, you can optionally opt into these messages by setting the `DEBUG` environment variable when starting Gatsby.
+
+Log all error messages:
+
+```shell
+DEBUG=flamelink:error gatsby develop
+```
+
+Log all warning messages:
+
+```shell
+DEBUG=flamelink:warning gatsby develop
+```
+
+Log all info messages:
+
+```shell
+DEBUG=flamelink:info gatsby develop
+```
+
+Log all Flamelink messages:
+
+```shell
+DEBUG=flamelink:* gatsby develop
 ```
 
 ## Options
@@ -161,18 +188,6 @@ For fine-grained control, you can specify an array of arrays for the specific na
 ```
 
 > This example will be available in the Gatsby GraphQL server as `allFlamelinkMainNavigation` and `allFlamelinkSecondaryNavigation` respectively.
-
-### verbose
-
-**Type: `{Boolean}`**
-
-Should this plugin log some outputs to the terminal. Default is `false`.
-
-```javascript
-{
-  verbose: true
-}
-```
 
 ## How to query your data
 

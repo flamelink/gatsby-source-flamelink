@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-flamelink",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Gatsby source plugin for building websites using the Flamelink CMS as a data source",
   "homepage": "https://github.com/flamelink/gatsby-source-flamelink#readme",
   "bugs": {
@@ -29,13 +29,12 @@
   "dependencies": {
     "@babel/runtime": "^7.1.5",
     "compose-then": "^1.0.1",
+    "debug": "^4.1.0",
     "firebase-admin": "^6.1.0",
-    "flamelink": "^0.19.5",
-    "lodash.curry": "^4.1.1",
-    "lodash.get": "^4.4.2",
-    "lodash.isplainobject": "^4.0.6",
-    "lodash.result": "^4.5.2",
-    "pascalcase": "^0.1.1"
+    "flamelink": "^0.19.6",
+    "lodash": "^4.17.11",
+    "pascalcase": "^0.1.1",
+    "present": "^1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",

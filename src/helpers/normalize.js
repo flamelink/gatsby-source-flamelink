@@ -1,9 +1,6 @@
 const crypto = require('crypto')
-const result = require('lodash.result')
 const compose = require('compose-then')
-const isPlainObject = require('lodash.isplainobject')
-const curry = require('lodash.curry')
-const get = require('lodash.get')
+const { result, isPlainObject, curry, get } = require('lodash')
 const pascalCase = require('pascalcase')
 const api = require('./api')
 
@@ -29,7 +26,7 @@ const digest = str =>
  * @param {any} key
  * @returns the valid name
  */
-function getValidKey({ key, verbose = false }) {
+function getValidKey(key) {
   let nkey = String(key)
   const NAME_RX = /^[_a-zA-Z][_a-zA-Z0-9]*$/
   // Replace invalid characters
@@ -55,7 +52,7 @@ const prepareKeys = entry => {
 
   const newEntry = { ...entry }
   Object.keys(newEntry).forEach(key => {
-    const newKey = getValidKey({ key })
+    const newKey = getValidKey(key)
     newEntry[newKey] = newEntry[key]
 
     if (newKey !== key) {
