@@ -1,6 +1,7 @@
 const admin = require('firebase-admin')
 const flamelink = require('flamelink')
-const get = require('lodash.get')
+const { get } = require('lodash')
+const { logWarning } = require('./logger')
 
 let app = null
 let allSchemas = null
@@ -61,7 +62,7 @@ const getSchemas = async options => {
   const schemasData = await app.schemas.get()
 
   if (!schemasData) {
-    console.warn('[FLAMELINK]: It seems like you do not have any available schemas setup just yet.')
+    logWarning('[FLAMELINK]: It seems like you do not have any available schemas setup just yet.')
   }
 
   allSchemas = Object.keys(schemasData || {})
