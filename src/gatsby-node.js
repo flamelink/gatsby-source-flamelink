@@ -108,8 +108,13 @@ exports.sourceNodes = async ({ actions, createNodeId }, configOptions = {}) => {
             navs = Object.values(navigationData)
           }
 
-          navs.forEach(nav => createNode(normalize.processNavigation(locale, nav, createNodeId)))
-          logInfo('Content finished')
+          await Promise.all(
+            navs.map(async nav => {
+              const data = await normalize.processNavigation(locale, nav, createNodeId)
+              return createNode(data)
+            })
+          )
+          logInfo('Navigation finished')
         }
 
         logInfo(`Finished processing locale: ${locale}`)
