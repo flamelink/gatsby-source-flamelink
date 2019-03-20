@@ -93,7 +93,8 @@ const getLocales = async options => {
     return options.locales
   }
 
-  return app.settings.get('locales')
+  const locales = await app.settings.get('locales')
+  return Array.isArray(locales) ? locales : Object.keys(locales)
 }
 
 exports.getLocales = getLocales
