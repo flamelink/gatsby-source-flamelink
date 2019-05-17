@@ -27,21 +27,21 @@
     "lint": "eslint ./src --cache"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.0",
+    "@babel/runtime": "^7.4.4",
     "compose-then": "^1.0.1",
     "debug": "^4.1.1",
-    "firebase-admin": "^7.1.0",
-    "flamelink": "^0.19.13",
+    "firebase-admin": "^7.3.0",
+    "flamelink": "^1.0.0-alpha.18",
     "lodash": "^4.17.11",
     "pascalcase": "^0.1.1",
     "present": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.4.0",
-    "@babel/preset-env": "^7.4.1",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
     "cross-env": "^5.2.0",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.16.0",

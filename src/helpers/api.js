@@ -7,15 +7,15 @@ let app = null
 let allSchemas = null
 
 const initApp = config => {
+  const { firebaseConfig, environment, dbType } = config
   const {
     pathToServiceAccount,
     projectId,
     clientEmail,
     privateKey,
     databaseURL,
-    storageBucket,
-    environment
-  } = config
+    storageBucket
+  } = firebaseConfig
 
   if (!databaseURL || !storageBucket) {
     throw new Error(
@@ -43,7 +43,7 @@ const initApp = config => {
       })
 
   // I do not necessarily love the `app` closure variable, but hey...
-  app = flamelink({ firebaseApp, isAdminApp: true, environment })
+  app = flamelink({ firebaseApp, dbType, environment })
 
   return app
 }
@@ -93,7 +93,7 @@ const getLocales = async options => {
     return options.locales
   }
 
-  const locales = await app.settings.get('locales')
+  const locales = await app.settings.getAvailableLocales()
   return Array.isArray(locales) ? locales : Object.keys(locales)
 }
 

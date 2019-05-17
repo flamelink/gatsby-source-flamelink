@@ -1,10 +1,6 @@
 # Gatsby Source Plugin for Flamelink
 
-> This plugin is brand new and still in alpha and as such can change in non-backwards compatible ways without notice. Please log any issues that you might find.
-
 Source plugin for pulling data into Gatsby v2 from [Flamelink](https://flamelink.io).
-
-> PLEASE NOTE: This plugin uses the [Flamelink JavaScript SDK](https://flamelink.github.io/flamelink) under the hood, which currently only support the [Firebase Realtime Database](https://firebase.google.com/docs/database/) and not [Cloud Firestore](https://firebase.google.com/docs/firestore/) just yet.
 
 ## Install
 
@@ -32,6 +28,7 @@ plugins: [
         databaseURL: 'https://<DATABASE_NAME>.firebaseio.com',
         storageBucket: '<PROJECT_ID>.appspot.com'
       },
+      dbType: 'cf',
       environment: 'production',
       content: true,
       populate: true,
@@ -93,6 +90,18 @@ Whichever is easiest to you, we're easy.
 
 > If you want to read up more about how to setup the Firebase admin SDK, [go here](https://firebase.google.com/docs/admin/setup). You don't need this, it is for more info if you are not familiar with the service account required.
 
+### dbType
+
+**Type: `{String}`**
+
+The type of Firebase database your are using. Can be one of `cf` or `rtdb`, for Cloud Firestore or Real-time Database respectively. Defaults to `rtdb`.
+
+```javascript
+{
+  dbType: 'rtdb'
+}
+```
+
 ### environment
 
 **Type: `{String}`**
@@ -142,9 +151,9 @@ For fine-grained control, you can specify an array of arrays for the specific co
 ```javascript
 {
   content: [
-    ['blog-posts', { populate: true }],
-    ['products', { populate: ['image'] }],
-    ['homepage', { populate: false, fields: ['title', 'description'] }]
+    { schemaKey: 'blog-posts', populate: true },
+    { schemaKey: 'products', populate: ['image'] },
+    { schemaKey: 'homepage', populate: false, fields: ['title', 'description'] }
   ]
 }
 ```
@@ -183,7 +192,10 @@ For fine-grained control, you can specify an array of arrays for the specific na
 
 ```javascript
 {
-  navigation: [['main', { structure: 'nested' }], ['secondary', { structure: 'list' }]]
+  navigation: [
+    { navigationKey: 'main', structure: 'nested' },
+    { navigationKey: 'secondary', structure: 'list' }
+  ]
 }
 ```
 
