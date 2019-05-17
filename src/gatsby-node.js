@@ -22,6 +22,7 @@ exports.sourceNodes = async ({ actions, createNodeId }, configOptions = {}) => {
     navigation = true,
     globals = true,
     environment = 'production',
+    dbType = 'rtdb',
     populate = true,
     firebaseConfig
   } = configOptions
@@ -31,7 +32,7 @@ exports.sourceNodes = async ({ actions, createNodeId }, configOptions = {}) => {
     const startTime = present()
 
     // Initialize Flamelink app
-    const app = api.initApp(firebaseConfig)
+    const app = api.initApp({ firebaseConfig, environment, dbType })
     await app.settings.setEnvironment(environment)
 
     if (globals) {
@@ -58,19 +59,31 @@ exports.sourceNodes = async ({ actions, createNodeId }, configOptions = {}) => {
               let contentData
 
               if (Array.isArray(content)) {
-                const contentType = content.find(
-                  type => (Array.isArray(type) ? type[0] : type) === schema.id
+                const schemaKey = content.find(
+                  type =>
+                    (Array.isArray(type)
+                      ? type[0]
+                      : typeof type === 'object'
+                      ? type.schemaKey
+                      : type) === schema.id
                 )
 
-                if (!contentType) {
+                logInfo(`Schema Key: ${JSON.stringify(schemaKey)}`)
+
+                if (!schemaKey) {
                   return
                 }
 
-                contentData = await app.content.get(
-                  ...(Array.isArray(contentType) ? contentType : [contentType])
-                )
+                const contentConfig = Array.isArray(schemaKey)
+                  ? schemaKey
+                  : typeof schemaKey === 'object'
+                  ? [schemaKey]
+                  : [{ schemaKey }]
+
+                contentData = await app.content.get(...contentConfig)
               } else {
-                contentData = await app.content.get(schema.id, { populate })
+                const contentConfig = { schemaKey: schema.id, populate }
+                contentData = await app.content.get(contentConfig)
               }
 
               if (contentData) {
@@ -101,7 +114,15 @@ exports.sourceNodes = async ({ actions, createNodeId }, configOptions = {}) => {
 
           if (Array.isArray(navigation)) {
             navs = await Promise.all(
-              navigation.map(nav => app.nav.get(...(Array.isArray(nav) ? nav : [nav])))
+              navigation.map(nav =>
+                app.nav.get(
+                  ...(Array.isArray(nav)
+                    ? nav
+                    : typeof nav === 'object'
+                    ? [nav]
+                    : [{ navigationKey: nav }])
+                )
+              )
             )
           } else {
             const navigationData = await app.nav.get()
