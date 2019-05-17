@@ -1,8 +1,8 @@
-// const fs = require('fs')
-// const path = require('path')
+const fs = require('fs')
+const path = require('path')
 const { locateImageFields } = require('../helpers/images')
 
-// const entry = JSON.stringify(fs.readFileSync(path.join(__dirname, '/data.json'), 'utf8'))
+const entry = JSON.parse(fs.readFileSync(path.join(__dirname, '/data.json'), 'utf8'))
 
 describe('locateImageFields', () => {
   test('works with single object', () => {
@@ -29,7 +29,7 @@ describe('locateImageFields', () => {
 
   test('works with nested array', () => {
     const result = locateImageFields({
-      images: [
+      hero: [
         {
           url: 'asdds',
           contentType: 'image/png'
@@ -69,5 +69,12 @@ describe('locateImageFields', () => {
       contentType: 'image/asdadadas'
     })
     expect(result).toHaveLength(0)
+  })
+
+  test('field test', () => {
+    const result = locateImageFields(entry)
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('url')
+    expect(result[0]).toHaveProperty('contentType', 'image/png')
   })
 })
