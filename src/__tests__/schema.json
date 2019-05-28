@@ -1,0 +1,214 @@
+[
+  {
+    "__meta__": {
+      "createdBy": "HrVbMfRbONamCsN8jNqoHqxEI7S2",
+      "createdDate": "2019-04-19T02:59:52.856Z",
+      "lastModifiedBy": "HrVbMfRbONamCsN8jNqoHqxEI7S2",
+      "lastModifiedDate": "2019-05-20T14:48:17.128Z"
+    },
+    "description": "Blog",
+    "enabled": true,
+    "fields": [
+      {
+        "defaultValue": "",
+        "description": "Title of the post",
+        "gridColumns": {
+          "lg": 12,
+          "md": 12,
+          "sm": 12,
+          "xs": 12
+        },
+        "hidden": false,
+        "id": 1555642691022,
+        "key": "title",
+        "show": true,
+        "title": "Title",
+        "type": "text"
+      },
+      {
+        "defaultValue": "",
+        "description": "Description",
+        "gridColumns": {
+          "lg": 12,
+          "md": 12,
+          "sm": 12,
+          "xs": 12
+        },
+        "hidden": false,
+        "id": 1555642708537,
+        "key": "description",
+        "show": false,
+        "title": "Description",
+        "type": "textarea"
+      },
+      {
+        "defaultValue": "",
+        "description": "",
+        "gridColumns": {
+          "lg": 12,
+          "md": 12,
+          "sm": 12,
+          "xs": 12
+        },
+        "hidden": false,
+        "id": 1555642763562,
+        "key": "content",
+        "show": false,
+        "title": "Content",
+        "type": "wysiwyg"
+      },
+      {
+        "description": "",
+        "fieldSeparator": " | ",
+        "gridColumns": {
+          "lg": 12,
+          "md": 12,
+          "sm": 12,
+          "xs": 12
+        },
+        "hidden": false,
+        "id": 1555642964253,
+        "key": "tag",
+        "multiple": false,
+        "relation": "categories",
+        "relationalFieldsToShow": [
+          "name"
+        ],
+        "show": false,
+        "title": "Tag",
+        "type": "select-relational"
+      },
+      {
+        "description": "hero image for this post",
+        "gridColumns": {
+          "lg": 12,
+          "md": 12,
+          "sm": 12,
+          "xs": 12
+        },
+        "hidden": false,
+        "id": 1555643581877,
+        "key": "hero",
+        "limit": 1,
+        "mediaTypes": [
+          "images"
+        ],
+        "show": false,
+        "title": "Hero",
+        "type": "media"
+      },
+      {
+        "description": "",
+        "gridColumns": {
+          "lg": 12,
+          "md": 12,
+          "sm": 12,
+          "xs": 12
+        },
+        "hidden": false,
+        "id": 1558363593015,
+        "key": "gallery",
+        "layout": "table",
+        "options": [
+          {
+            "description": "",
+            "gridColumns": {
+              "lg": 12,
+              "md": 12,
+              "sm": 12,
+              "xs": 12
+            },
+            "hidden": false,
+            "id": 1558363621736,
+            "key": "image",
+            "limit": 1,
+            "mediaTypes": [
+              "images"
+            ],
+            "show": false,
+            "title": "image",
+            "type": "media"
+          },
+          {
+            "defaultValue": "",
+            "description": "",
+            "gridColumns": {
+              "lg": 12,
+              "md": 12,
+              "sm": 12,
+              "xs": 12
+            },
+            "hidden": false,
+            "id": 1558363629389,
+            "key": "alt",
+            "show": false,
+            "title": "Image Title",
+            "type": "text"
+          }
+        ],
+        "show": false,
+        "title": "gallery",
+        "type": "repeater"
+      }
+    ],
+    "group": "Blog",
+    "icon": "",
+    "id": "blog",
+    "sortable": true,
+    "title": "Blog",
+    "type": "collection"
+  },
+  {
+    "__meta__": {
+      "createdBy": "HrVbMfRbONamCsN8jNqoHqxEI7S2",
+      "createdDate": "2019-04-19T03:01:46.657Z",
+      "lastModifiedBy": "HrVbMfRbONamCsN8jNqoHqxEI7S2",
+      "lastModifiedDate": "2019-05-20T14:49:38.605Z"
+    },
+    "description": "",
+    "enabled": true,
+    "fields": [
+      {
+        "defaultValue": "",
+        "description": "",
+        "gridColumns": {
+          "lg": 12,
+          "md": 12,
+          "sm": 12,
+          "xs": 12
+        },
+        "hidden": false,
+        "id": 1555642873759,
+        "key": "name",
+        "show": true,
+        "title": "Name",
+        "type": "text"
+      },
+      {
+        "description": "",
+        "gridColumns": {
+          "lg": 12,
+          "md": 12,
+          "sm": 12,
+          "xs": 12
+        },
+        "hidden": false,
+        "id": 1558363769895,
+        "key": "image",
+        "limit": 1,
+        "mediaTypes": [
+          "images"
+        ],
+        "show": false,
+        "title": "image",
+        "type": "media"
+      }
+    ],
+    "group": "Categories",
+    "icon": "",
+    "id": "categories",
+    "sortable": true,
+    "title": "Categories",
+    "type": "collection"
+  }
+]

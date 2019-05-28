@@ -46,9 +46,12 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "gatsby-source-filesystem": "^2.0.36",
+    "jest": "^24.8.0",
     "prettier": "^1.16.4"
   },
   "peerDependencies": {
-    "gatsby": "^2.2.2"
+    "gatsby": "^2.2.2",
+    "gatsby-source-filesystem": "^2.0.29"
   }
 }

@@ -7,6 +7,7 @@
 const present = require('present')
 const api = require('./helpers/api')
 const normalize = require('./helpers/normalize')
+const { downloadEntryImages } = require('./helpers/images')
 const { logInfo, logError } = require('./helpers/logger')
 
 /**
@@ -15,8 +16,11 @@ const { logInfo, logError } = require('./helpers/logger')
  * @param {*} { actions, createNodeId }
  * @param {*} [configOptions={}]
  */
-exports.sourceNodes = async ({ actions, createNodeId }, configOptions = {}) => {
-  const { createNode } = actions
+exports.sourceNodes = async (
+  { actions, getNode, createNodeId, reporter, store, cache },
+  configOptions = {}
+) => {
+  const { createNode, touchNode } = actions
   const {
     content = true,
     navigation = true,
@@ -98,6 +102,19 @@ exports.sourceNodes = async ({ actions, createNodeId }, configOptions = {}) => {
                       entry,
                       createNodeId
                     )
+
+                    // download & inject local image
+                    await downloadEntryImages({
+                      entry: data,
+                      store,
+                      cache,
+                      createNode,
+                      createNodeId,
+                      reporter,
+                      getNode,
+                      touchNode
+                    })
+
                     return createNode(data)
                   })
                 )
