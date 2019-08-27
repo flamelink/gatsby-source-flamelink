@@ -1,6 +1,11 @@
-const admin = require('firebase-admin')
-const flamelink = require('flamelink')
 const { get } = require('lodash')
+const admin = require('firebase-admin')
+const flamelink = require('flamelink/app')
+require('flamelink/content')
+require('flamelink/storage')
+require('flamelink/settings')
+require('flamelink/users')
+require('flamelink/navigation')
 const { logWarning } = require('./logger')
 
 let app = null
@@ -50,7 +55,7 @@ const initApp = config => {
 
 exports.initApp = initApp
 
-const getSchemas = async options => {
+const getSchemas = async () => {
   if (!app) {
     throw new Error('No existing Flamelink app instance. Make sure the app is initialized first.')
   }

@@ -13,7 +13,8 @@
     "flamelink",
     "headless",
     "cms",
-    "firebase"
+    "firebase",
+    "firestore"
   ],
   "author": "JP Erasmus <jperasmus11@gmail.com>",
   "main": "index.js",
@@ -27,31 +28,31 @@
     "lint": "eslint ./src --cache"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.4",
+    "@babel/runtime": "^7.5.5",
     "compose-then": "^1.0.1",
     "debug": "^4.1.1",
-    "firebase-admin": "^7.3.0",
-    "flamelink": "^1.0.0-alpha.18",
-    "lodash": "^4.17.11",
-    "pascalcase": "^0.1.1",
+    "firebase-admin": "^8.4.0",
+    "flamelink": "^1.0.0-alpha.25",
+    "lodash": "^4.17.15",
+    "pascalcase": "^1.0.0",
     "present": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "cross-env": "^5.2.0",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "gatsby-source-filesystem": "^2.0.36",
-    "jest": "^24.8.0",
-    "prettier": "^1.16.4"
+    "eslint": "^6.2.2",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "gatsby-source-filesystem": "^2.1.18",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2"
   },
   "peerDependencies": {
-    "gatsby": "^2.2.2",
-    "gatsby-source-filesystem": "^2.0.29"
+    "gatsby": "^2.14.0",
+    "gatsby-source-filesystem": "^2.1.18"
   }
 }
