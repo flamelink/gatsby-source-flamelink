@@ -7,7 +7,6 @@
 const present = require('present')
 const api = require('./helpers/api')
 const normalize = require('./helpers/normalize')
-const { downloadEntryImages } = require('./helpers/images')
 const { logInfo, logError } = require('./helpers/logger')
 
 /**
@@ -30,6 +29,16 @@ exports.sourceNodes = async (
     populate = true,
     firebaseConfig
   } = configOptions
+
+  const gatsbyHelpers = {
+    getNode,
+    touchNode,
+    createNode,
+    createNodeId,
+    store,
+    cache,
+    reporter
+  }
 
   try {
     logInfo('Starting with config:', JSON.stringify(configOptions))
@@ -96,26 +105,7 @@ exports.sourceNodes = async (
 
                 await Promise.all(
                   entries.map(async entry => {
-                    const data = await normalize.processContentEntry(
-                      schema.id,
-                      locale,
-                      entry,
-                      createNodeId
-                    )
-
-                    // download & inject local image
-                    await downloadEntryImages({
-                      entry: data,
-                      store,
-                      cache,
-                      createNode,
-                      createNodeId,
-                      reporter,
-                      getNode,
-                      touchNode
-                    })
-
-                    return createNode(data)
+                    return normalize.processContentEntry(schema.id, locale, entry, gatsbyHelpers)
                   })
                 )
               }
