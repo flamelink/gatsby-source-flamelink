@@ -40,12 +40,12 @@ const downloadEntryImages = async ({
   reporter
 }) => {
   const entryImages = locateImageFields(entry)
-  logInfo('Found images', entryImages.length)
+  logInfo(`Found images for entry with ID: ${entry.flamelink_id}`, entryImages.length)
   return Promise.all(
     entryImages.map(async image => {
-      const { flamelink_id: id, url } = image
+      const { id, url } = image
       let fileNodeID
-      const mediaDataCacheKey = `flamelink-media-${id}`
+      const mediaDataCacheKey = `flamelink-media-${image.flamelink_id || image.id}`
       const cacheMediaData = await cache.get(mediaDataCacheKey)
 
       if (cacheMediaData && cacheMediaData.fileNodeID) {
@@ -83,7 +83,7 @@ const downloadEntryImages = async ({
       }
 
       // eslint-disable-next-line no-param-reassign
-      image.localFile___NODE = fileNodeID
+      image.localFile___NODE = fileNodeID || null
 
       return image
     })

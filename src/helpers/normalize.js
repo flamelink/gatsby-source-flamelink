@@ -179,10 +179,7 @@ const checkNavigationTypes = nav => {
   return newNav
 }
 
-const prepNav = compose(
-  prepareKeys,
-  checkNavigationTypes
-)
+const prepNav = compose(prepareKeys, checkNavigationTypes)
 
 const DATAFIELD_TO_MEDIATYPE = {
   'markdown-editor': 'text/markdown',
@@ -218,15 +215,13 @@ const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, createNode
 const processContentEntry = async (contentType, locale, entry, gatsbyHelpers) => {
   const { getNode, touchNode, createNode, createNodeId, store, cache, reporter } = gatsbyHelpers
   const schemas = await api.getSchemas()
-  const fieldTypes = get(schemas.find(schema => schema.id === contentType), 'fields', []).reduce(
-    (acc, val) => Object.assign(acc, { [val.key]: val.type }),
-    {}
-  )
+  const fieldTypes = get(
+    schemas.find(schema => schema.id === contentType),
+    'fields',
+    []
+  ).reduce((acc, val) => Object.assign(acc, { [val.key]: val.type }), {})
 
-  const prepEntry = compose(
-    prepareKeys,
-    checkContentEntryTypes(fieldTypes)
-  )
+  const prepEntry = compose(prepareKeys, checkContentEntryTypes(fieldTypes))
 
   const preppedEntry = await prepEntry(entry)
   const nodeId = createNodeId(`flamelink-entry-${locale}-${preppedEntry.flamelink_id}`)
