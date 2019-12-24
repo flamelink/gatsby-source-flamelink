@@ -2,6 +2,8 @@
 const { createRemoteFileNode } = require('gatsby-source-filesystem')
 const { logInfo } = require('./logger')
 
+const SUPPORTED_IMAGE_TYPES = ['png', 'jpg', 'jpeg']
+
 /**
  * Recursively search for image fields in content
  *
@@ -16,8 +18,10 @@ const locateImageFields = entry => {
   // perfect condition
   const { contentType, url } = entry
   if (contentType && url) {
-    const [type] = contentType.split('/')
-    if (type === 'image') results.push(entry)
+    const [type, subType] = contentType.split('/')
+    if (type === 'image' && SUPPORTED_IMAGE_TYPES.includes(subType)) {
+      results.push(entry)
+    }
   }
 
   // run recursively on array & object
