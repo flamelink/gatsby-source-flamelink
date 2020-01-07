@@ -1,0 +1,36 @@
+name: Build Pull Request
+
+on: [pull_request]
+
+env:
+  NODE_ENV: production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install dependencies
+        run: yarn install --production=false --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Tests
+        run: yarn test

@@ -25,34 +25,35 @@
     "build": "babel src --out-dir . --ignore **/__tests__",
     "prepare": "cross-env NODE_ENV=production npm run build",
     "dev": "babel -w src --out-dir . --ignore **/__tests__",
-    "lint": "eslint ./src --cache"
+    "lint": "eslint ./src --cache",
+    "test": "jest"
   },
   "dependencies": {
-    "@babel/runtime": "7.7.2",
+    "@babel/runtime": "7.7.7",
     "compose-then": "1.0.1",
     "debug": "4.1.1",
-    "firebase-admin": "8.7.0",
+    "firebase-admin": "8.9.0",
     "flamelink": "1.0.0-alpha.27",
     "lodash": "4.17.15",
     "pascalcase": "1.0.0",
     "present": "1.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.7.0",
-    "@babel/core": "7.7.2",
-    "@babel/preset-env": "7.7.1",
+    "@babel/cli": "7.7.7",
+    "@babel/core": "7.7.7",
+    "@babel/preset-env": "7.7.7",
     "cross-env": "6.0.3",
-    "eslint": "6.6.0",
+    "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
-    "eslint-config-prettier": "6.6.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-prettier": "3.1.1",
-    "gatsby-source-filesystem": "2.1.37",
+    "eslint-config-prettier": "6.9.0",
+    "eslint-plugin-import": "2.19.1",
+    "eslint-plugin-prettier": "3.1.2",
+    "gatsby-source-filesystem": "2.1.43",
     "jest": "24.9.0",
     "prettier": "1.19.1"
   },
   "peerDependencies": {
-    "gatsby": "^2.17.16",
-    "gatsby-source-filesystem": "^2.1.37"
+    "gatsby": "^2.3.x",
+    "gatsby-source-filesystem": "^2.x.x"
   }
 }
