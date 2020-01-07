@@ -82,7 +82,7 @@ const downloadEntryImages = async ({
             })
           }
         } catch (e) {
-          reporter.warning(`failed to download ${image.file}`)
+          reporter.warn(`failed to download ${image.file}`)
         }
       }
 
