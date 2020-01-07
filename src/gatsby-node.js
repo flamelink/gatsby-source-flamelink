@@ -105,7 +105,7 @@ exports.sourceNodes = async (
 
                 await Promise.all(
                   entries.map(async entry => {
-                    return normalize.processContentEntry(schema.id, locale, entry, gatsbyHelpers)
+                    return normalize.processContentEntry(schema, locale, entry, gatsbyHelpers)
                   })
                 )
               }

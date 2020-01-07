@@ -212,14 +212,14 @@ const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, createNode
   }
 }
 
-const processContentEntry = async (contentType, locale, entry, gatsbyHelpers) => {
+const processContentEntry = async (schema, locale, entry, gatsbyHelpers) => {
+  const contentType = schema.id
   const { getNode, touchNode, createNode, createNodeId, store, cache, reporter } = gatsbyHelpers
-  const schemas = await api.getSchemas()
-  const fieldTypes = get(
-    schemas.find(schema => schema.id === contentType),
-    'fields',
-    []
-  ).reduce((acc, val) => Object.assign(acc, { [val.key]: val.type }), {})
+  const schemaFields = get(schema, 'fields', [])
+  const fieldTypes = schemaFields.reduce(
+    (acc, val) => Object.assign(acc, { [val.key]: val.type }),
+    {}
+  )
 
   const prepEntry = compose(prepareKeys, checkContentEntryTypes(fieldTypes))
 
