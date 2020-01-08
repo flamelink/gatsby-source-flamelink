@@ -6,6 +6,7 @@
   },
   "plugins": ["prettier"],
   "rules": {
+    "camelcase": "off",
     "global-require": "off",
     "no-nested-ternary": "off",
     "no-prototype-builtins": "off",

@@ -951,9 +951,9 @@
   integrity sha512-EiewY1by3mYanihTa5Wsl2/gseFzmRmZr61YtVgQN5TXpX1OlQtqds6cCoR8Hh8VueeZJg6lTV9VLVQqu6iqHw==
 
 "@firebase/storage-types@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@firebase/storage-types/-/storage-types-0.3.3.tgz#179ad38485d450023406cf9731560d690ef39d19"
-  integrity sha512-fUp4kpbxwDiWs/aIBJqBvXgFHZvgoND2JA0gJYSEsXtWtVwfgzY/710plErgZDeQKopX5eOR1sHskZkQUy0U6w==
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@firebase/storage-types/-/storage-types-0.3.8.tgz#3b5e16c9ae8b50f5cd4e7320fa5fc0933150e7d2"
+  integrity sha512-F0ED2WZaGjhjEdOk85c/1ikDQdWM1NiATFuTmRsaGYZyoERiwh/Mr6FnjqnLIeiJZqa6v2hk/aUgKosXjMWH/Q==
 
 "@firebase/util@0.2.36":
   version "0.2.36"
@@ -1101,10 +1101,10 @@
   dependencies:
     "@flamelink/sdk-app-types" "^1.0.0-alpha.27"
 
-"@flamelink/sdk-storage-cf@^1.0.0-alpha.27":
-  version "1.0.0-alpha.27"
-  resolved "https://registry.yarnpkg.com/@flamelink/sdk-storage-cf/-/sdk-storage-cf-1.0.0-alpha.27.tgz#59da584e23303011aac248301da22d5aa915f284"
-  integrity sha512-/+4/fKI7kXv/QiLasvqhLwNMDcG6RfVYw1zWGEG7SFXD6/yqp+e/bSXY7PHUDbXq1sTTavcA8WcJ5HsFqerZTQ==
+"@flamelink/sdk-storage-cf@^1.0.0-alpha.28":
+  version "1.0.0-alpha.28"
+  resolved "https://registry.yarnpkg.com/@flamelink/sdk-storage-cf/-/sdk-storage-cf-1.0.0-alpha.28.tgz#12bd05d329a66def7ff5c6eda8e8d4e35a6767a9"
+  integrity sha512-DlORMBr2GLf4Y8faJHGCKw5ANs3zIGW4NG0ZBDotyrglMq992pIULBzNxk9wYk2fTRclHvLqd3C3upD8P8L7lQ==
   dependencies:
     "@firebase/storage-types" "^0.3.3"
     "@flamelink/sdk-app" "^1.0.0-alpha.27"
@@ -1115,10 +1115,10 @@
     compose-then "^1.0.1"
     lodash "^4.17.15"
 
-"@flamelink/sdk-storage-rtdb@^1.0.0-alpha.27":
-  version "1.0.0-alpha.27"
-  resolved "https://registry.yarnpkg.com/@flamelink/sdk-storage-rtdb/-/sdk-storage-rtdb-1.0.0-alpha.27.tgz#557725ba8fdf74cf159caf91f9ea579a22d372f1"
-  integrity sha512-hLdBCri+/ICMV4YNwBIDqb7XM36++Bv1kXU5W1DyKzDAJ+ea/4h2FmY6l8TFnX99ZUZi+xSOq7wEHetawhooRg==
+"@flamelink/sdk-storage-rtdb@^1.0.0-alpha.28":
+  version "1.0.0-alpha.28"
+  resolved "https://registry.yarnpkg.com/@flamelink/sdk-storage-rtdb/-/sdk-storage-rtdb-1.0.0-alpha.28.tgz#cfb67ac9ad6a11bad05158e8b926fef7c6b1cff7"
+  integrity sha512-LOMacmU7Fcl+yPWYG2wVivLIGjCwAX4jy0G/WBdfsyBTMaG5+sBwA/JyNbekGJFirVk4z37W3Ar1BxKmNiEeZw==
   dependencies:
     "@firebase/storage-types" "^0.3.3"
     "@flamelink/sdk-app" "^1.0.0-alpha.27"
@@ -1542,9 +1542,9 @@
     "@types/istanbul-lib-report" "*"
 
 "@types/lodash@^4.14.136":
-  version "4.14.137"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.137.tgz#8a4804937dc6462274ffcc088df8f14fc1b368e2"
-  integrity sha512-g4rNK5SRKloO+sUGbuO7aPtwbwzMgjK+bm9BBhLD7jGUiGR7zhwYEhSln/ihgYQBeIJ5j7xjyaYzrWTcu3UotQ==
+  version "4.14.149"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
+  integrity sha512-ijGqzZt/b7BfzcK9vTrS6MFljQRPn5BFWOx8oE0GYxribu6uV+aA9zZuXI1zc/etK9E8nrgdoF2+LgUw7+9tJQ==
 
 "@types/long@^4.0.0":
   version "4.0.0"
@@ -3150,10 +3150,10 @@ firebase-admin@8.9.0:
     "@google-cloud/firestore" "^3.0.0"
     "@google-cloud/storage" "^4.1.2"
 
-flamelink@1.0.0-alpha.27:
-  version "1.0.0-alpha.27"
-  resolved "https://registry.yarnpkg.com/flamelink/-/flamelink-1.0.0-alpha.27.tgz#3b86cc8b6c5b8774bafcfb7d6eaf2b2c683f5eb2"
-  integrity sha512-NdC2z80nI5kMNjOV641QBzt1L9ZJgR1E22dAjM31gOocc6p7+2o2TOcPxisC8gmiMcBHi+v2/sYLXgL7a6134g==
+flamelink@1.0.0-alpha.28:
+  version "1.0.0-alpha.28"
+  resolved "https://registry.yarnpkg.com/flamelink/-/flamelink-1.0.0-alpha.28.tgz#3b6a0c6c4ff5014d5de89a84123bfd2d360db0e9"
+  integrity sha512-X94hWoleXfvA5fML4qBb7dZAMi4C0CVmQnO0WN10EpPfdek6fpS7CKZLe2nnAAc/NelbyvBIlx5OsWkAsg1N1g==
   dependencies:
     "@flamelink/sdk-app" "^1.0.0-alpha.27"
     "@flamelink/sdk-app-types" "^1.0.0-alpha.27"
@@ -3165,8 +3165,8 @@ flamelink@1.0.0-alpha.27:
     "@flamelink/sdk-schemas-rtdb" "^1.0.0-alpha.27"
     "@flamelink/sdk-settings-cf" "^1.0.0-alpha.27"
     "@flamelink/sdk-settings-rtdb" "^1.0.0-alpha.27"
-    "@flamelink/sdk-storage-cf" "^1.0.0-alpha.27"
-    "@flamelink/sdk-storage-rtdb" "^1.0.0-alpha.27"
+    "@flamelink/sdk-storage-cf" "^1.0.0-alpha.28"
+    "@flamelink/sdk-storage-rtdb" "^1.0.0-alpha.28"
     "@flamelink/sdk-users-cf" "^1.0.0-alpha.27"
     "@flamelink/sdk-users-rtdb" "^1.0.0-alpha.27"
     compose-then "^1.0.1"

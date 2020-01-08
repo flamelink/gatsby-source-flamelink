@@ -1,24 +1,11 @@
-const crypto = require('crypto')
 const compose = require('compose-then')
 const { result, isPlainObject, curry, get } = require('lodash')
 const pascalCase = require('pascalcase')
-const api = require('./api')
 const { downloadEntryImages } = require('./images')
 
 // RESERVED_FIELDS from here https://www.gatsbyjs.org/docs/node-interface/
 const RESERVED_FIELDS = ['id', 'children', 'parent', 'fields', 'internal', '__meta__']
 const CONFLICT_FIELD_PREFIX = `flamelink_`
-
-/**
- * Encrypts a String using md5 hash of hexadecimal digest.
- *
- * @param {any} str
- */
-const digest = str =>
-  crypto
-    .createHash(`md5`)
-    .update(str)
-    .digest(`hex`)
 
 /**
  * Validate the GraphQL naming conventions & protect specific fields.
@@ -195,26 +182,25 @@ const CONTENT_DATAFIELDS = Object.keys(DATAFIELD_TO_MEDIATYPE)
  * so it can be picked up by gatsby's
  * markdown & other transformer plugins
  */
-const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, createNodeId }) => {
+const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, gatsbyHelpers }) => {
   const mediaType = DATAFIELD_TO_MEDIATYPE[fieldType]
 
   return {
-    id: createNodeId(`flamelink-content-${nodeId}`),
+    id: gatsbyHelpers.createNodeId(`flamelink-content-${nodeId}`),
     parent: nodeId,
     children: [],
     content: editorContent,
     internal: {
       mediaType,
-      type: `Flamelink${pascalCase(mediaType)}Content`,
+      type: `Flamelink${pascalCase(mediaType)}ContentNode`,
       content: editorContent,
-      contentDigest: digest(editorContent)
+      contentDigest: gatsbyHelpers.createContentDigest(editorContent)
     }
   }
 }
 
-const processContentEntry = async (schema, locale, entry, gatsbyHelpers) => {
+const processContentEntry = async ({ schema, locale, entry, gatsbyHelpers }) => {
   const contentType = schema.id
-  const { getNode, touchNode, createNode, createNodeId, store, cache, reporter } = gatsbyHelpers
   const schemaFields = get(schema, 'fields', [])
   const fieldTypes = schemaFields.reduce(
     (acc, val) => Object.assign(acc, { [val.key]: val.type }),
@@ -224,8 +210,9 @@ const processContentEntry = async (schema, locale, entry, gatsbyHelpers) => {
   const prepEntry = compose(prepareKeys, checkContentEntryTypes(fieldTypes))
 
   const preppedEntry = await prepEntry(entry)
-  const nodeId = createNodeId(`flamelink-entry-${locale}-${preppedEntry.flamelink_id}`)
-  const nodeContent = JSON.stringify(preppedEntry)
+  const nodeId = gatsbyHelpers.createNodeId(
+    `flamelink-entry-${locale}-${preppedEntry.flamelink_id}`
+  )
   const childrenNodes = []
 
   const contentNodes = Object.entries(fieldTypes).reduce((nodes, fieldEntry) => {
@@ -238,7 +225,7 @@ const processContentEntry = async (schema, locale, entry, gatsbyHelpers) => {
       fieldType,
       editorContent,
       nodeId,
-      createNodeId
+      gatsbyHelpers
     })
 
     childrenNodes.push(contentNode.id)
@@ -257,8 +244,8 @@ const processContentEntry = async (schema, locale, entry, gatsbyHelpers) => {
       children: childrenNodes,
       internal: {
         type: `Flamelink${pascalCase(contentType)}Content`,
-        content: nodeContent,
-        contentDigest: digest(nodeContent)
+        content: JSON.stringify(preppedEntry),
+        contentDigest: gatsbyHelpers.createContentDigest(preppedEntry)
       }
     }
   }
@@ -266,24 +253,17 @@ const processContentEntry = async (schema, locale, entry, gatsbyHelpers) => {
   // download & inject local image
   await downloadEntryImages({
     entry: entryNode,
-    store,
-    cache,
-    createNode,
-    createNodeId,
-    reporter,
-    getNode,
-    touchNode
+    gatsbyHelpers
   })
 
-  contentNodes.forEach(contentNode => createNode(contentNode))
-  createNode(entryNode)
+  contentNodes.forEach(contentNode => gatsbyHelpers.createNode(contentNode))
+  gatsbyHelpers.createNode(entryNode)
 }
 exports.processContentEntry = processContentEntry
 
-const processNavigation = async (locale, nav, createNodeId) => {
+const processNavigation = async ({ locale, nav, gatsbyHelpers }) => {
   const preppedNav = await prepNav(nav)
-  const nodeId = createNodeId(`flamelink-nav-${locale}-${preppedNav.flamelink_id}`)
-  const nodeContent = JSON.stringify(preppedNav)
+  const nodeId = gatsbyHelpers.createNodeId(`flamelink-nav-${locale}-${preppedNav.flamelink_id}`)
 
   return {
     ...preppedNav,
@@ -294,8 +274,8 @@ const processNavigation = async (locale, nav, createNodeId) => {
       children: [],
       internal: {
         type: `Flamelink${pascalCase(preppedNav.flamelink_id)}Navigation`,
-        content: nodeContent,
-        contentDigest: digest(nodeContent)
+        content: JSON.stringify(preppedNav),
+        contentDigest: gatsbyHelpers.createContentDigest(preppedNav)
       }
     }
   }
@@ -303,10 +283,9 @@ const processNavigation = async (locale, nav, createNodeId) => {
 
 exports.processNavigation = processNavigation
 
-const processGlobals = (globalsData, createNodeId) => {
+const processGlobals = ({ globalsData, gatsbyHelpers }) => {
   const preppedGlobals = prepareKeys(globalsData)
-  const nodeId = createNodeId(`flamelink-globals`)
-  const nodeContent = JSON.stringify(preppedGlobals)
+  const nodeId = gatsbyHelpers.createNodeId(`flamelink-globals`)
 
   return {
     ...preppedGlobals,
@@ -316,8 +295,8 @@ const processGlobals = (globalsData, createNodeId) => {
       children: [],
       internal: {
         type: `FlamelinkGlobals`,
-        content: nodeContent,
-        contentDigest: digest(nodeContent)
+        content: JSON.stringify(preppedGlobals),
+        contentDigest: gatsbyHelpers.createContentDigest(preppedGlobals)
       }
     }
   }
