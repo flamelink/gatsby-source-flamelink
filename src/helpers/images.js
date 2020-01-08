@@ -11,7 +11,7 @@ const SUPPORTED_IMAGE_TYPES = ['png', 'jpg', 'jpeg']
  * @return {array} an Array of all node with { contentType: 'image/png', url: ... }
  */
 const locateImageFields = entry => {
-  if (typeof entry !== 'object' || entry == null) return []
+  if (typeof entry !== 'object' || !entry) return []
 
   let results = []
 

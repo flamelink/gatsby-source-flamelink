@@ -1,5 +1,5 @@
 const compose = require('compose-then')
-const { result, isPlainObject, curry, get } = require('lodash')
+const { result, isPlainObject, curry, get, keys } = require('lodash')
 const pascalCase = require('pascalcase')
 const { downloadEntryImages } = require('./images')
 
@@ -39,7 +39,7 @@ const prepareKeys = entry => {
   }
 
   const newEntry = { ...entry }
-  Object.keys(newEntry).forEach(key => {
+  keys(newEntry).forEach(key => {
     const newKey = getValidKey(key)
     newEntry[newKey] = newEntry[key]
 
@@ -90,7 +90,7 @@ const checkContentEntryTypes = curry(async (fieldTypes, entry) => {
   }
 
   const newEntry = { ...entry }
-  Object.keys(newEntry).forEach(async key => {
+  keys(newEntry).forEach(async key => {
     const dataType =
       key === 'order'
         ? 'number'
@@ -122,7 +122,7 @@ const checkNavigationTypes = nav => {
   }
 
   const newNav = { ...nav }
-  Object.keys(newNav).forEach(key => {
+  keys(newNav).forEach(key => {
     switch (key) {
       case 'id':
       case 'uuid':
@@ -174,19 +174,27 @@ const DATAFIELD_TO_MEDIATYPE = {
   'wysiwyg-cke': 'text/html'
 }
 
-const CONTENT_DATAFIELDS = Object.keys(DATAFIELD_TO_MEDIATYPE)
-
 /**
  * turn editor content into a node
  * with `node.internal.mediaType`
  * so it can be picked up by gatsby's
  * markdown & other transformer plugins
  */
-const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, gatsbyHelpers }) => {
+const prepareEditorContentNode = ({
+  fieldType,
+  fieldKey,
+  editorContent,
+  nodeId,
+  gatsbyHelpers
+}) => {
   const mediaType = DATAFIELD_TO_MEDIATYPE[fieldType]
 
+  if (!mediaType) {
+    gatsbyHelpers.reporter.warn(`No media type found for field type: ${fieldType}.`)
+  }
+
   return {
-    id: gatsbyHelpers.createNodeId(`flamelink-content-node-${nodeId}`),
+    id: gatsbyHelpers.createNodeId(`flamelink-content-node-${nodeId}-${fieldType}-${fieldKey}`),
     parent: nodeId,
     children: [],
     content: editorContent,
@@ -199,65 +207,151 @@ const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, gatsbyHelp
   }
 }
 
-const processContentEntry = async ({ schema, locale, entry, gatsbyHelpers }) => {
-  const contentType = schema.id
-  const schemaFields = get(schema, 'fields', [])
-  const fieldTypes = schemaFields.reduce(
-    (acc, val) => Object.assign(acc, { [val.key]: val.type }),
-    {}
-  )
-
-  const prepEntry = compose(prepareKeys, checkContentEntryTypes(fieldTypes))
-
-  const preppedEntry = await prepEntry(entry)
-  const nodeId = gatsbyHelpers.createNodeId(
-    `flamelink-entry-${locale}-${preppedEntry.flamelink_id}`
-  )
-  const childrenNodes = []
-
-  const contentNodes = Object.entries(fieldTypes).reduce((nodes, fieldEntry) => {
-    const [key, fieldType] = fieldEntry
-    const editorContent = preppedEntry[key]
-
-    if (!CONTENT_DATAFIELDS.includes(fieldType) || !editorContent) return nodes
-
-    const contentNode = prepareEditorContentNode({
-      fieldType,
-      editorContent,
-      nodeId,
-      gatsbyHelpers
-    })
-
-    childrenNodes.push(contentNode.id)
-    preppedEntry[`${key}___NODE`] = contentNode.id
-    delete preppedEntry[key]
-
-    return [...nodes, contentNode]
-  }, [])
-
-  const entryNode = {
-    ...preppedEntry,
-    ...{
-      flamelink_locale: locale,
-      id: nodeId,
-      parent: null,
-      children: childrenNodes,
-      internal: {
-        type: `Flamelink${pascalCase(contentType)}Content`,
-        content: JSON.stringify(preppedEntry),
-        contentDigest: gatsbyHelpers.createContentDigest(preppedEntry)
-      }
-    }
-  }
-
+const createContentEntryNode = async ({ entryNode, gatsbyHelpers }) => {
   // download & inject local image
   await downloadEntryImages({
     entry: entryNode,
     gatsbyHelpers
   })
 
-  contentNodes.forEach(contentNode => gatsbyHelpers.createNode(contentNode))
   gatsbyHelpers.createNode(entryNode)
+}
+
+const processContentEntryFields = async ({
+  contentType,
+  fields,
+  nodeEntry,
+  nodeId,
+  parentFieldKey = '',
+  gatsbyHelpers
+}) => {
+  const children = []
+
+  if (!fields || !fields.length || !isPlainObject(nodeEntry)) {
+    return children
+  }
+
+  await Promise.all(
+    fields.map(async field => {
+      const fieldKey = field.key
+      const fieldType = field.type
+      const fieldValue = nodeEntry[field.key]
+
+      switch (fieldType) {
+        case 'markdown-editor':
+        case 'wysiwyg':
+        case 'wysiwyg-cke': {
+          const contentNode = prepareEditorContentNode({
+            fieldType,
+            fieldKey,
+            editorContent: fieldValue,
+            nodeId,
+            gatsbyHelpers
+          })
+
+          gatsbyHelpers.createNode(contentNode)
+
+          children.push(contentNode.id)
+          nodeEntry[`${fieldKey}___NODE`] = contentNode.id
+          delete nodeEntry[fieldKey]
+          break
+        }
+
+        // TODO: handle "repeater" fields
+        case 'fieldset': {
+          const fieldNode = fieldValue || {}
+          const fieldNodeId = gatsbyHelpers.createNodeId(
+            `flamelink-field-${nodeId}-${parentFieldKey}${fieldKey}`
+          )
+          const fieldNodeType = `Flamelink${pascalCase(
+            contentType
+          )}ContentField${parentFieldKey}${pascalCase(fieldKey)}`
+
+          const contentNode = {
+            ...fieldNode,
+            ...{
+              id: fieldNodeId,
+              parent: nodeId,
+              children: await processContentEntryFields({
+                contentType,
+                nodeId: fieldNodeId,
+                nodeEntry: fieldNode,
+                parentFieldKey: `${parentFieldKey}${pascalCase(fieldKey)}`,
+                fields: field.options,
+                gatsbyHelpers
+              }),
+              internal: {
+                type: fieldNodeType,
+                content: JSON.stringify(fieldNode),
+                contentDigest: gatsbyHelpers.createContentDigest(fieldNode)
+              }
+            }
+          }
+
+          children.push(contentNode.id)
+          nodeEntry[`${fieldKey}___NODE`] = contentNode.id
+          delete nodeEntry[fieldKey]
+
+          await createContentEntryNode({ entryNode: contentNode, gatsbyHelpers })
+
+          break
+        }
+
+        default:
+          break
+      }
+    })
+  )
+
+  return children
+}
+
+const getEntryNode = async ({ contentType, nodeType, fields, entry, locale, gatsbyHelpers }) => {
+  const fieldTypes = fields.reduce((acc, val) => Object.assign(acc, { [val.key]: val.type }), {})
+  const prepEntry = compose(prepareKeys, checkContentEntryTypes(fieldTypes))
+
+  const preppedEntry = await prepEntry(entry)
+
+  const nodeId = gatsbyHelpers.createNodeId(
+    `flamelink-entry-${locale}-${preppedEntry.flamelink_id}`
+  )
+
+  return {
+    ...preppedEntry,
+    ...{
+      flamelink_locale: locale,
+      id: nodeId,
+      parent: null,
+      children: await processContentEntryFields({
+        contentType,
+        nodeId,
+        nodeEntry: preppedEntry,
+        fields,
+        gatsbyHelpers
+      }),
+      internal: {
+        type: nodeType,
+        content: JSON.stringify(preppedEntry),
+        contentDigest: gatsbyHelpers.createContentDigest(preppedEntry)
+      }
+    }
+  }
+}
+
+const processContentEntry = async ({ schema, locale, entry, gatsbyHelpers }) => {
+  const contentType = schema.id
+  const fields = get(schema, 'fields', [])
+
+  const entryNode = await getEntryNode({
+    contentType,
+    nodeType: `Flamelink${pascalCase(contentType)}Content`,
+    fields,
+    entry,
+    locale,
+    gatsbyHelpers
+  })
+
+  await createContentEntryNode({ entryNode, gatsbyHelpers })
 }
 exports.processContentEntry = processContentEntry
 
