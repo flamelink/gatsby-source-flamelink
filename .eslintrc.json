@@ -9,6 +9,7 @@
     "camelcase": "off",
     "global-require": "off",
     "no-nested-ternary": "off",
+    "no-param-reassign": "off",
     "no-prototype-builtins": "off",
     "no-underscore-dangle": "off",
     "no-unused-vars": "warn",
