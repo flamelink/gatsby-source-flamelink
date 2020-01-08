@@ -33,7 +33,7 @@
     "compose-then": "1.0.1",
     "debug": "4.1.1",
     "firebase-admin": "8.9.0",
-    "flamelink": "1.0.0-alpha.27",
+    "flamelink": "1.0.0-alpha.28",
     "lodash": "4.17.15",
     "pascalcase": "1.0.0",
     "present": "1.0.0"

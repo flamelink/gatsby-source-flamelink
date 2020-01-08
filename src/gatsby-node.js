@@ -16,10 +16,10 @@ const { logInfo, logError } = require('./helpers/logger')
  * @param {*} [configOptions={}]
  */
 exports.sourceNodes = async (
-  { actions, getNode, createNodeId, reporter, store, cache },
+  { actions, getNode, createNodeId, createContentDigest, reporter, store, cache },
   configOptions = {}
 ) => {
-  const { createNode, touchNode } = actions
+  const { createNode, touchNode, createParentChildLink } = actions
   const {
     content = true,
     navigation = true,
@@ -35,6 +35,8 @@ exports.sourceNodes = async (
     touchNode,
     createNode,
     createNodeId,
+    createContentDigest,
+    createParentChildLink,
     store,
     cache,
     reporter
@@ -51,7 +53,7 @@ exports.sourceNodes = async (
     if (globals) {
       logInfo('Globals started')
       const globalsData = await app.settings.getGlobals()
-      createNode(normalize.processGlobals(globalsData, createNodeId))
+      createNode(normalize.processGlobals({ globalsData, gatsbyHelpers }))
       logInfo('Globals finished')
     }
 
@@ -105,7 +107,7 @@ exports.sourceNodes = async (
 
                 await Promise.all(
                   entries.map(async entry => {
-                    return normalize.processContentEntry(schema, locale, entry, gatsbyHelpers)
+                    return normalize.processContentEntry({ schema, locale, entry, gatsbyHelpers })
                   })
                 )
               }
@@ -138,7 +140,7 @@ exports.sourceNodes = async (
 
           await Promise.all(
             navs.map(async nav => {
-              const data = await normalize.processNavigation(locale, nav, createNodeId)
+              const data = await normalize.processNavigation({ locale, nav, gatsbyHelpers })
               return createNode(data)
             })
           )

@@ -33,30 +33,24 @@ const locateImageFields = entry => {
 
 exports.locateImageFields = locateImageFields
 
-const downloadEntryImages = async ({
-  entry,
-  store,
-  getNode,
-  touchNode,
-  cache,
-  createNode,
-  createNodeId,
-  reporter
-}) => {
+const downloadEntryImages = async ({ entry, gatsbyHelpers }) => {
+  const { getNode, touchNode, reporter, store, cache, createNode, createNodeId } = gatsbyHelpers
   const entryImages = locateImageFields(entry)
   logInfo(`Found images for entry with ID: ${entry.flamelink_id}`, entryImages.length)
   return Promise.all(
     entryImages.map(async image => {
-      const { id, url } = image
-      let fileNodeID
-      const mediaDataCacheKey = `flamelink-media-${image.flamelink_id || image.id}`
+      const { id, flamelink_id, url } = image
+      const fileId = flamelink_id || id
+      const mediaDataCacheKey = `flamelink-media-${fileId}`
       const cacheMediaData = await cache.get(mediaDataCacheKey)
+
+      let fileNodeID
 
       if (cacheMediaData && cacheMediaData.fileNodeID) {
         const fileNode = getNode(cacheMediaData.fileNodeID)
 
         if (fileNode) {
-          logInfo('Found image in cache:', image.file)
+          logInfo('Found image in cache:', fileId)
           // eslint-disable-next-line prefer-destructuring
           fileNodeID = cacheMediaData.fileNodeID
           touchNode({
@@ -65,14 +59,14 @@ const downloadEntryImages = async ({
         }
       } else {
         try {
-          logInfo('Downloading image:', image.file)
+          logInfo('Downloading image:', fileId)
           const fileNode = await createRemoteFileNode({
             url,
             store,
             cache,
             createNode,
             createNodeId,
-            parentNodeId: id
+            parentNodeId: fileId
           })
 
           if (fileNode) {
@@ -82,7 +76,7 @@ const downloadEntryImages = async ({
             })
           }
         } catch (e) {
-          reporter.warn(`failed to download ${image.file}`)
+          reporter.warn(`Failed to download image: ${fileId}`)
         }
       }
 
