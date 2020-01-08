@@ -186,7 +186,7 @@ const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, gatsbyHelp
   const mediaType = DATAFIELD_TO_MEDIATYPE[fieldType]
 
   return {
-    id: gatsbyHelpers.createNodeId(`flamelink-content-${nodeId}`),
+    id: gatsbyHelpers.createNodeId(`flamelink-content-node-${nodeId}`),
     parent: nodeId,
     children: [],
     content: editorContent,
