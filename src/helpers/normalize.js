@@ -257,7 +257,6 @@ const processContentEntryFields = async ({
           break
         }
 
-        // TODO: handle "repeater" fields
         case 'fieldset': {
           const fieldNode = fieldValue || {}
           const fieldNodeId = gatsbyHelpers.createNodeId(
@@ -290,6 +289,79 @@ const processContentEntryFields = async ({
 
           children.push(contentNode.id)
           nodeEntry[`${fieldKey}___NODE`] = contentNode.id
+          delete nodeEntry[fieldKey]
+
+          await createContentEntryNode({ entryNode: contentNode, gatsbyHelpers })
+
+          break
+        }
+
+        case 'repeater': {
+          const repeaterFieldNode = fieldValue || []
+
+          const repeaterFieldNodeId = gatsbyHelpers.createNodeId(
+            `flamelink-field-${nodeId}-${parentFieldKey}${fieldKey}`
+          )
+          const repeaterFieldNodeType = `Flamelink${pascalCase(
+            contentType
+          )}ContentField${parentFieldKey}${pascalCase(fieldKey)}`
+
+          const rowNodes = await Promise.all(repeaterFieldNode.map(async (item, idx) => {
+            // A repeater row item is basically a field group
+            const fieldNode = item || {}
+            const fieldNodeId = gatsbyHelpers.createNodeId(
+              `flamelink-field-${nodeId}-${parentFieldKey}${fieldKey}${idx}`
+            )
+            const fieldNodeType = `Flamelink${pascalCase(
+              contentType
+            )}ContentField${parentFieldKey}${pascalCase(fieldKey)}Item`
+
+            const contentNode = {
+              ...fieldNode,
+              ...{
+                id: fieldNodeId,
+                parent: repeaterFieldNodeId,
+                children: await processContentEntryFields({
+                  contentType,
+                  nodeId: fieldNodeId,
+                  nodeEntry: fieldNode,
+                  parentFieldKey: `${parentFieldKey}${pascalCase(fieldKey)}`,
+                  fields: field.options,
+                  gatsbyHelpers
+                }),
+                internal: {
+                  type: fieldNodeType,
+                  content: JSON.stringify(fieldNode),
+                  contentDigest: gatsbyHelpers.createContentDigest(fieldNode)
+                }
+              }
+            }
+
+            children.push(contentNode.id)
+            nodeEntry[`${fieldKey}___NODE`] = contentNode.id
+            delete nodeEntry[fieldKey]
+
+            await createContentEntryNode({ entryNode: contentNode, gatsbyHelpers })
+
+            return fieldNodeId
+          }))
+
+          const contentNode = {
+            ...repeaterFieldNode,
+            ...{
+              id: repeaterFieldNodeId,
+              parent: nodeId,
+              children: rowNodes,
+              internal: {
+                type: repeaterFieldNodeType,
+                content: JSON.stringify(repeaterFieldNode),
+                contentDigest: gatsbyHelpers.createContentDigest(repeaterFieldNode)
+              }
+            }
+          }
+
+          children.push(contentNode.id)
+          nodeEntry[`${fieldKey}___NODE`] = rowNodes
           delete nodeEntry[fieldKey]
 
           await createContentEntryNode({ entryNode: contentNode, gatsbyHelpers })
