@@ -60,96 +60,93 @@ exports.sourceNodes = async (
     const availableLocales = await api.getLocales(configOptions)
     logInfo(`Available Locales: ${availableLocales.join()}`)
 
-    await Promise.all(
-      availableLocales.map(async locale => {
-        logInfo(`Start processing locale: ${locale}`)
-        await api.setLocale(locale)
+    for await (const locale of availableLocales) {
+      logInfo(`Start processing locale: ${locale}`)
+      await api.setLocale(locale)
 
-        if (content) {
-          logInfo('Content started:', JSON.stringify(content))
-          const schemas = await api.getSchemas(configOptions)
+      if (content) {
+        logInfo('Content started:', JSON.stringify(content))
+        const schemas = await api.getSchemas(configOptions)
 
-          await Promise.all(
-            schemas.map(async schema => {
-              let contentData
+        await Promise.all(
+          schemas.map(async schema => {
+            let contentData
 
-              if (Array.isArray(content)) {
-                const schemaKey = content.find(
-                  type =>
-                    (Array.isArray(type)
-                      ? type[0]
-                      : typeof type === 'object'
-                      ? type.schemaKey
-                      : type) === schema.id
-                )
+            if (Array.isArray(content)) {
+              const schemaKey = content.find(
+                type =>
+                  (Array.isArray(type)
+                    ? type[0]
+                    : typeof type === 'object'
+                    ? type.schemaKey
+                    : type) === schema.id
+              )
 
-                logInfo(`Schema Key: ${JSON.stringify(schemaKey)}`)
+              logInfo(`Schema Key: ${JSON.stringify(schemaKey)}`)
 
-                if (!schemaKey) {
-                  return
-                }
-
-                const contentConfig = Array.isArray(schemaKey)
-                  ? schemaKey
-                  : typeof schemaKey === 'object'
-                  ? [schemaKey]
-                  : [{ schemaKey }]
-
-                contentData = await app.content.get(...contentConfig)
-              } else {
-                const contentConfig = { schemaKey: schema.id, populate }
-                contentData = await app.content.get(contentConfig)
+              if (!schemaKey) {
+                return
               }
 
-              if (contentData) {
-                const entries =
-                  schema.type === 'single' ? [contentData] : Object.values(contentData)
+              const contentConfig = Array.isArray(schemaKey)
+                ? schemaKey
+                : typeof schemaKey === 'object'
+                ? [schemaKey]
+                : [{ schemaKey }]
 
-                await Promise.all(
-                  entries.map(async entry => {
-                    return normalize.processContentEntry({ schema, locale, entry, gatsbyHelpers })
-                  })
-                )
-              }
-            })
-          )
+              contentData = await app.content.get(...contentConfig)
+            } else {
+              const contentConfig = { schemaKey: schema.id, populate }
+              contentData = await app.content.get(contentConfig)
+            }
 
-          logInfo('Content finished')
-        }
+            if (contentData) {
+              const entries = schema.type === 'single' ? [contentData] : Object.values(contentData)
 
-        if (navigation) {
-          logInfo('Navigation started:', JSON.stringify(navigation))
-          let navs
+              await Promise.all(
+                entries.map(async entry => {
+                  return normalize.processContentEntry({ schema, locale, entry, gatsbyHelpers })
+                })
+              )
+            }
+          })
+        )
 
-          if (Array.isArray(navigation)) {
-            navs = await Promise.all(
-              navigation.map(nav =>
-                app.nav.get(
-                  ...(Array.isArray(nav)
-                    ? nav
-                    : typeof nav === 'object'
-                    ? [nav]
-                    : [{ navigationKey: nav }])
-                )
+        logInfo('Content finished')
+      }
+
+      if (navigation) {
+        logInfo('Navigation started:', JSON.stringify(navigation))
+        let navs
+
+        if (Array.isArray(navigation)) {
+          navs = await Promise.all(
+            navigation.map(nav =>
+              app.nav.get(
+                ...(Array.isArray(nav)
+                  ? nav
+                  : typeof nav === 'object'
+                  ? [nav]
+                  : [{ navigationKey: nav }])
               )
             )
-          } else {
-            const navigationData = await app.nav.get()
-            navs = Object.values(navigationData)
-          }
-
-          await Promise.all(
-            navs.map(async nav => {
-              const data = await normalize.processNavigation({ locale, nav, gatsbyHelpers })
-              return createNode(data)
-            })
           )
-          logInfo('Navigation finished')
+        } else {
+          const navigationData = await app.nav.get()
+          navs = Object.values(navigationData)
         }
 
-        logInfo(`Finished processing locale: ${locale}`)
-      })
-    )
+        await Promise.all(
+          navs.map(async nav => {
+            const data = await normalize.processNavigation({ locale, nav, gatsbyHelpers })
+            return createNode(data)
+          })
+        )
+        logInfo('Navigation finished')
+      }
+
+      logInfo(`Finished processing locale: ${locale}`)
+    }
 
     const endTime = present()
     logInfo(`Successfully ended in ${endTime - startTime} milliseconds`)
