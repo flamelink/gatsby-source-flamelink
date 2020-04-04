@@ -2,6 +2,7 @@ const compose = require('compose-then')
 const { result, isPlainObject, curry, get } = require('lodash')
 const pascalCase = require('pascalcase')
 const { downloadEntryImages } = require('./images')
+const { logInfo, logError } = require('./logger')
 
 // RESERVED_FIELDS from here https://www.gatsbyjs.org/docs/node-interface/
 const RESERVED_FIELDS = ['id', 'children', 'parent', 'fields', 'internal', '__meta__']
@@ -182,11 +183,12 @@ const CONTENT_DATAFIELDS = Object.keys(DATAFIELD_TO_MEDIATYPE)
  * so it can be picked up by gatsby's
  * markdown & other transformer plugins
  */
-const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, gatsbyHelpers }) => {
+const prepareEditorContentNode = ({ fieldType, editorContent, nodeId, index, gatsbyHelpers }) => {
   const mediaType = DATAFIELD_TO_MEDIATYPE[fieldType]
+  const id = `flamelink-content-${mediaType}-${nodeId}-${index}`
 
   return {
-    id: gatsbyHelpers.createNodeId(`flamelink-content-${nodeId}`),
+    id: gatsbyHelpers.createNodeId(id),
     parent: nodeId,
     children: [],
     content: editorContent,
@@ -215,6 +217,7 @@ const processContentEntry = async ({ schema, locale, entry, gatsbyHelpers }) => 
   )
   const childrenNodes = []
 
+  let index = 0
   const contentNodes = Object.entries(fieldTypes).reduce((nodes, fieldEntry) => {
     const [key, fieldType] = fieldEntry
     const editorContent = preppedEntry[key]
@@ -225,10 +228,12 @@ const processContentEntry = async ({ schema, locale, entry, gatsbyHelpers }) => 
       fieldType,
       editorContent,
       nodeId,
+      index,
       gatsbyHelpers
     })
 
     childrenNodes.push(contentNode.id)
+    index = index + 1
     preppedEntry[`${key}___NODE`] = contentNode.id
     delete preppedEntry[key]
 
