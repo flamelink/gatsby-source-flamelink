@@ -2,7 +2,7 @@ const compose = require('compose-then')
 const { result, isPlainObject, curry, get, keys } = require('lodash')
 const pascalCase = require('pascalcase')
 const { downloadEntryImages } = require('./images')
-const { parseMetaTimestamps } = require('./helpers')
+const { parseFirebaseTimestamps } = require('./helpers')
 
 // RESERVED_FIELDS from here https://www.gatsbyjs.org/docs/node-interface/
 const RESERVED_FIELDS = ['id', 'children', 'parent', 'fields', 'internal', '__meta__']
@@ -54,7 +54,7 @@ const prepareKeys = entry => {
   })
 
   // Find and convert Firebase Timestamp objects to UTC strings
-  newEntry = parseMetaTimestamps(newEntry)
+  newEntry = parseFirebaseTimestamps(newEntry)
 
   return newEntry
 }

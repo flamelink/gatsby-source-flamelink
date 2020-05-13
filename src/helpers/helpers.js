@@ -14,7 +14,7 @@ const parseFirebaseDate = timestampObject => {
 /**
  * Iterate over an object and parse all Firebase Timestamp objects to UTC strings
  */
-exports.parseMetaTimestamps = entry => {
+exports.parseFirebaseTimestamps = entry => {
   const flattenedEntry = flatten(entry)
   /**
    * After flattening the entry a Firebase timestamp can be found by looking for keys that
