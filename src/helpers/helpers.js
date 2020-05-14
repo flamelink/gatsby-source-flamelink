@@ -23,7 +23,7 @@ exports.parseFirebaseTimestamps = entry => {
    * it on to be parsed into a UTC string.
    */
   Object.keys(flattenedEntry)
-    .filter(key => key.includes('_seconds'))
+    .filter(key => key.endsWith('._seconds'))
     .forEach(flattenedKey => {
       const key = flattenedKey.split('._seconds')[0]
       set(entry, key, parseFirebaseDate(get(entry, key)))
