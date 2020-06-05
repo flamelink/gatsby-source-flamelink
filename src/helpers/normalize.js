@@ -456,7 +456,7 @@ const processNavigation = async ({ locale, nav, gatsbyHelpers }) => {
 exports.processNavigation = processNavigation
 
 const processGlobals = ({ globalsData, gatsbyHelpers }) => {
-  const preppedGlobals = prepareKeys(globalsData)
+  const preppedGlobals = prepareKeys(globalsData || {})
   const nodeId = gatsbyHelpers.createNodeId(`flamelink-globals`)
 
   return {
