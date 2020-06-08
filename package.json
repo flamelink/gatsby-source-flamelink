@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-flamelink",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "description": "Gatsby source plugin for building websites using the Flamelink CMS as a data source",
   "homepage": "https://github.com/flamelink/gatsby-source-flamelink#readme",
   "bugs": {
@@ -33,7 +33,7 @@
     "compose-then": "1.0.1",
     "debug": "4.1.1",
     "firebase-admin": "8.9.0",
-    "flamelink": "1.0.0-alpha.28",
+    "flamelink": "1.0.0-alpha.30",
     "flat": "^5.0.0",
     "lodash": "4.17.15",
     "pascalcase": "1.0.0",
