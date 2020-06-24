@@ -29,3 +29,4 @@ node_modules/
 /*.js
 !index.js
 /helpers
+package-lock.json
