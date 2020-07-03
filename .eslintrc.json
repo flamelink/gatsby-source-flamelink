@@ -9,7 +9,9 @@
     "camelcase": "off",
     "global-require": "off",
     "no-nested-ternary": "off",
+    "no-param-reassign": "off",
     "no-prototype-builtins": "off",
+    "no-restricted-syntax": "off",
     "no-underscore-dangle": "off",
     "no-unused-vars": "warn",
     "prettier/prettier": ["error", { "singleQuote": true, "printWidth": 100 }]

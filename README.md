@@ -18,9 +18,14 @@ yarn add gatsby-source-flamelink
 
 ## How to use
 
-// In your gatsby-config.js
+In order to use the plugin you need to configure it to point to the Firebase instance that is using Flamelink.
+To do this you will need to create a service account (if you haven't already) and download the JSON file for
+the service account. You will also need your Firebase configuration details. Once you have these details
+add the following to your config file:
+
 
 ```javascript
+// In your gatsby-config.js
 plugins: [
   {
     resolve: 'gatsby-source-flamelink',
