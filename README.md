@@ -1,5 +1,7 @@
 # Gatsby Source Plugin for Flamelink
 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+
 Source plugin for pulling data into Gatsby v2 from [Flamelink](https://flamelink.io).
 
 ## Install
@@ -31,16 +33,16 @@ plugins: [
       firebaseConfig: {
         pathToServiceAccount: 'path/to/serviceAccountKey.json',
         databaseURL: 'https://<DATABASE_NAME>.firebaseio.com',
-        storageBucket: '<PROJECT_ID>.appspot.com'
+        storageBucket: '<PROJECT_ID>.appspot.com',
       },
       dbType: 'cf',
       environment: 'production',
       content: true,
       populate: true,
       navigation: true,
-      globals: true
-    }
-  }
+      globals: true,
+    },
+  },
 ]
 ```
 
@@ -158,12 +160,12 @@ For fine-grained control, you can specify an array of arrays for the specific co
   content: [
     { schemaKey: 'blog-posts', populate: true },
     { schemaKey: 'products', populate: ['image'] },
-    { schemaKey: 'homepage', populate: false, fields: ['title', 'description'] }
+    { schemaKey: 'homepage', populate: false, fields: ['title', 'description'] },
   ]
 }
 ```
 
-Any [options available for the SDK](https://flamelink.github.io/flamelink/#/content?id=available-options) are also available here.
+Any [options available for the SDK](https://flamelink.github.io/flamelink-js-sdk/#/content?id=available-options) are also available here.
 
 > This example will be available in the Gatsby GraphQL server as `allFlamelinkBlogPostsContent`, `allFlamelinkProductsContent` and `allFlamelinkHomepageContent` respectively.
 
@@ -177,7 +179,7 @@ Whether your Flamelink project's relational and media content should be automati
 
 If value is set to `true`, all available content will be populated to the deepest level possible, ie. get all the things!! This is by far the easiest option, just keep an eye on it if you find that the build gets too slow.
 
-Alternatively, specify an array with specific fields to populate. This option is global for all content, so it might not be relevant for all content. You can also use the array-of-arrays option for `content` if you need to specify different `populate` options per content type. Take a look at the [Flamelink SDK docs](https://flamelink.github.io/flamelink/#/content?id=populate) for more info on how the `populate` option works.
+Alternatively, specify an array with specific fields to populate. This option is global for all content, so it might not be relevant for all content. You can also use the array-of-arrays option for `content` if you need to specify different `populate` options per content type. Take a look at the [Flamelink SDK docs](https://flamelink.github.io/flamelink-js-sdk/#/content?id=populate) for more info on how the `populate` option works.
 
 ```javascript
 {
@@ -199,7 +201,7 @@ For fine-grained control, you can specify an array of arrays for the specific na
 {
   navigation: [
     { navigationKey: 'main', structure: 'nested' },
-    { navigationKey: 'secondary', structure: 'list' }
+    { navigationKey: 'secondary', structure: 'list' },
   ]
 }
 ```
