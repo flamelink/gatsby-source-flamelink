@@ -240,7 +240,7 @@ query {
         tagline
         timeFormat
         timezone
-        flamelink__meta_ {
+        _fl_meta_ {
           createdBy
           createdDate
           lastModifiedBy
@@ -275,7 +275,7 @@ query {
             quality
             width
           }
-          flamelink__meta_ {
+          _fl_meta_ {
             createdBy
             createdDate
             lastModifiedBy
