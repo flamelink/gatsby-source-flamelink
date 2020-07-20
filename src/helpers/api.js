@@ -11,7 +11,8 @@ const { logWarning } = require('./logger')
 let app = null
 let allSchemas = null
 
-const initApp = config => {
+const initApp = (config, name) => {
+  name = name || `fl_${new Date().getTime()}`
   const { firebaseConfig, environment, dbType } = config
   const {
     pathToServiceAccount,
@@ -34,18 +35,15 @@ const initApp = config => {
     )
   }
 
-  const firebaseApp = pathToServiceAccount
-    ? admin.initializeApp({
-        // eslint-disable-next-line import/no-dynamic-require
-        credential: admin.credential.cert(require(pathToServiceAccount)),
-        databaseURL,
-        storageBucket
-      })
-    : admin.initializeApp({
-        credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
-        databaseURL,
-        storageBucket
-      })
+  const options = {
+    credential: pathToServiceAccount
+      ? admin.credential.cert(require(pathToServiceAccount)) // eslint-disable-line import/no-dynamic-require
+      : admin.credential.cert({ projectId, clientEmail, privateKey }),
+    databaseURL,
+    storageBucket
+  }
+
+  const firebaseApp = admin.initializeApp(options, name)
 
   // I do not necessarily love the `app` closure variable, but hey...
   app = flamelink({ firebaseApp, dbType, environment })
