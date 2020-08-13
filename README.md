@@ -225,6 +225,10 @@ There is also an additional property, `flamelink_locale` available on all conten
 
 Further, all `flamelink_id`s are always strings.
 
+For Cloud Firestore the "meta" field is `_fl_meta_`.
+For Realtime Database the "meta" field is `flamelink__meta_`.
+All queries below use `flamelink__meta_` - replace this with `_fl_meta_` when using Cloud Firestore.
+
 ### Get Global data
 
 ```graphql
