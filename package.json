@@ -1,10 +1,6 @@
 {
   "name": "gatsby-source-flamelink",
-<<<<<<< HEAD
-  "version": "3.0.3",
-=======
   "version": "3.0.4",
->>>>>>> ff9687051c71c37091a013dafcbbeab9c8787dc8
   "description": "Gatsby source plugin for building websites using the Flamelink CMS as a data source",
   "homepage": "https://github.com/flamelink/gatsby-source-flamelink#readme",
   "bugs": {
