@@ -35,7 +35,7 @@
     "firebase-admin": "9.6.0",
     "flamelink": "1.0.0-alpha.34",
     "flat": "^5.0.0",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "pascalcase": "1.0.0",
     "present": "1.0.0"
   },
